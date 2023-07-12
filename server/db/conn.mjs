@@ -11,6 +11,6 @@ try {
   console.error(e);
 }
 
-let db = conn.db("connect_four");
+let db = conn.db("redacted_speed");
 
 export default db;
