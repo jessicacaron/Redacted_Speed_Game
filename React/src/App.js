@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from "react";
+import './App.css';
+import Card from './components/Card';
 
 
 
@@ -24,16 +26,42 @@ function App() {
     }
     getRecords();
     return;
-  }, []); 
+  }, []);
 
 
   return (
-    <div className="App">
-      <header>
-        Hello World. {records}
-      </header>
-    </div>
+      <div className="App">
+        <header>
+          Hello World. {records}
+        </header>
+        <div className="game">
+          <div className="table-container">
+            <img src="/assets/table/Table1.jpg" alt="Table" className="table-image" />
+            <div className="card-container">
+              <div className="card-column">
+                <Card rank="12" suit="HEART" isFaceUp={true} />
+              </div>
+              <div className="card-column">
+                <Card rank="2" suit="HEART" isFaceUp={false} />
+              </div>
+              <div className="card-column">
+                <Card rank="13" suit="DIAMOND" isFaceUp={true} />
+              </div>
+              <div className="card-column">
+                <Card rank="7" suit="CLUB" isFaceUp={true} />
+              </div>
+              <div className="card-column">
+                <Card rank="1" suit="JOKER" isFaceUp={true} />
+              </div>
+              <div className="card-column">
+                <Card rank="3" suit="SPADE" isFaceUp={true} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
   );
+
 }
 
 export default App;

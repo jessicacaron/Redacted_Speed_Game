@@ -1,0 +1,47 @@
+.game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+.column {
+    padding: 10px;
+}
+
+
+.table-container {
+    position: relative;
+}
+
+.table-image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.card-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card-column {
+    flex-basis: 33.33%;
+    padding: 10px;
+    box-sizing: border-box; /* ensure proper spacing */
+}
+
+@media (max-width: 600px) {
+    .card-column {
+        flex-basis: 50%; /* Adjust this value for smaller screens */
+    }
+}
