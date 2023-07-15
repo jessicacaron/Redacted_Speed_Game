@@ -13,17 +13,17 @@ const Card = ({ rank, suit, isFaceUp }) => {
     }
 
     //style for back card to not be huge
-    const cardBackStyle = {
-        width: '238.117px', // Adjust the width to desired size
+    const cardStyle = {
+        width: '200px', // Adjust the width to desired size
         height: 'auto', // Automatically adjust the height to maintain aspect ratio
     };
 
     return (
         <div className="card">
             {isFaceUp ? (
-                <img src={cardImagePath} alt={`${rank} of ${suit}`} />
+                <img src={cardImagePath} alt={`${rank} of ${suit}`} style={cardStyle} />
             ) : (
-                <img src="/assets/cards/backRedDarkWHC.png" alt="Card back" style={cardBackStyle}/>
+                <img src="/assets/cards/backRedDarkWHC.png" alt="Card back" style={cardStyle}/>
             )}
         </div>
     );
