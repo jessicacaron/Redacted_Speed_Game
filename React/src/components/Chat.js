@@ -1,49 +1,61 @@
 import React, { useState, useEffect, useRef } from 'react';
+import io from 'socket.io-client';
+import './Chat.css';
 
 const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [selectedMessage, setSelectedMessage] = useState('');
     const messagesRef = useRef(null);
-    const wsRef = useRef(null);
+    const socketRef = useRef(null);
+    const [username, setUsername] = useState(''); //test username
+    const [isUsernameSubmitted, setIsUsernameSubmitted] = useState(false);
+    const [isWrapperActive, setIsWrapperActive] = useState(true);
+    const [isPopupActive, setIsPopupActive] = useState(true);
 
     useEffect(() => {
         messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
 
-        wsRef.current = new WebSocket('ws://localhost:6969');
-        wsRef.current.onopen = () => console.log('Connection opened!');
-        wsRef.current.onmessage = async (event) => showMessage(event.data);
-        wsRef.current.onclose = () => {
-            wsRef.current = null;
-        };
+        // Connect to the Socket.IO server
+        socketRef.current = io.connect('http://localhost:6969');
+
+        // Join the chat room
+        socketRef.current.emit('joinChat', username);
+
+        // Listen for 'chatMessage' event from the server
+        socketRef.current.on('chatMessage', (message) => {
+            showMessage(message);
+        });
 
         return () => {
-            if (wsRef.current) {
-                wsRef.current.close();
+            if (socketRef.current) {
+                socketRef.current.disconnect();
             }
         };
-    }, []);
+    }, [username]); // add 'username' as a dependency
 
-    const showMessage = async (message) => {
-        if (typeof message !== 'string') {
-            try {
-                message = await message.text();
-            } catch (error) {
-                console.error('Error converting Blob to text:', error);
-                return;
-            }
+    useEffect(() => {
+        if (isUsernameSubmitted) {
+            socketRef.current.emit('joinChat', username);
         }
+    }, [username, isUsernameSubmitted]);
 
+    const showMessage = (message) => {
         setMessages((prevMessages) => [...prevMessages, message]);
     };
 
     const sendMessage = () => {
-        if (!wsRef.current) {
+        if (!socketRef.current) {
             showMessage('No WebSocket connection.');
             return;
         }
 
-        wsRef.current.send(selectedMessage);
-        showMessage(selectedMessage);
+        // Emit 'chatMessage' event to the server with the user's username
+        socketRef.current.emit('chatMessage', {
+            user: username,
+            message: selectedMessage,
+        });
+
+        showMessage(`${username}: ${selectedMessage}`);
         setSelectedMessage('');
     };
 
@@ -51,9 +63,54 @@ const Chat = () => {
         setSelectedMessage(event.target.value);
     };
 
+    //username stuff
+   async function  handleUsernameSubmit(event) {
+       event.preventDefault();
+       setIsWrapperActive(false);
+       setIsPopupActive(false);
+
+       const form = event.target;
+       const username = form.elements.username.value;
+
+        // Perform any necessary validation before submitting the username
+        if (username.trim() === '') {
+            alert('Please enter a username.');
+            return;
+        }
+
+       setUsername(username);
+
+        // You can perform additional logic here if needed
+        alert(`Username submitted: ${username}`);
+    };
+
     return (
         <div>
+            {isWrapperActive && isPopupActive && (
+                <div className="background">
+                    <main
+                        className={`wrapper ${isWrapperActive ? 'active' : ''} ${
+                            isPopupActive ? 'active-popup' : ''
+                        }`}
+                    >
+                        <section className="form-box username">
+                            <h2>Choose Username</h2>
+                            <form onSubmit={handleUsernameSubmit}>
+                                <div className="input-box">
+                                    <label htmlFor="username">Username</label>
+                                    <input type="text" placeholder="Enter your username" id="username" required />
+                                </div>
+                                <button type="submit" className="btn">
+                                    Submit
+                                </button>
+                            </form>
+                        </section>
+                    </main>
+                </div>
+            )}
+
             <h1>Real Time Messaging</h1>
+
             <pre
                 id="messages"
                 style={{ height: '400px', overflow: 'scroll' }}
@@ -62,7 +119,7 @@ const Chat = () => {
         {messages.map((message, index) => (
             <React.Fragment key={index}>
                 {index > 0 && '\n\n'}
-                {message}
+                {message.user ? `${message.user}: ${message.message}` : message}
             </React.Fragment>
         ))}
       </pre>
