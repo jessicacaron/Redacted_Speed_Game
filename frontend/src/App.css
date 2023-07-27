@@ -45,3 +45,340 @@
         flex-basis: 50%; /* Adjust this value for smaller screens */
     }
 }
+
+@import url('https://use.typekit.net/qzu8qnj.css');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "museo-sans", sans-serif;
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url("../public/assets/background/Login.png");
+  background-size:cover;
+}
+
+.App-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 99;
+}
+
+.logo {
+  font-size: 2em;
+  color: white;
+  user-select: none;
+}
+
+.navigation a {
+  position: relative;
+  font-size: 1em;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 40px;
+}
+
+.navigation a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 3px;
+  background: white;
+  border-radius: 5px;
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: transform .5s;
+}
+
+.navigation a:hover::after {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+
+.navigation .btn-login-popup {
+  width: 130px;
+  height: 50px;
+  background: transparent;
+  border: 2px solid white;
+  outline: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1em;
+  color: white;
+  font-weight: 500;
+  margin-left: 40px;
+  transition: .5s;
+}
+
+.navigation .btn-login-popup:hover {
+  background: white;
+  color: #282c34;
+}
+
+.wrapper {
+  position: relative;
+  width: 400px;
+  height: 440px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, .5);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 30px rgba(0, 0, 0, .5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transform: scale(0);
+  transition: transform 0.2s ease-in-out, height 0.2s ease;
+}
+
+.wrapper.active {
+  height: 600px;
+}
+
+.wrapper.active-popup {
+    opacity: .85;
+
+  transform: scale(1);
+}
+
+.wrapper .form-box {
+
+  width: 100%;
+  padding: 40px;
+}
+
+.wrapper .form-box.login {
+    
+  transition: transform 0.18s ease;
+  transform: translateX(0);
+}
+
+.wrapper.active .form-box.login {
+  transition: none;
+  transform: translateX(-400px);
+}
+.wrapper .form-box.register {
+  position: absolute;
+  transition: none;
+  transform: translateX(400px);
+}
+
+.wrapper.active .form-box.register {
+  transition: transform 0.18s ease;
+  transform: translateX(0);
+}
+
+.form-box h2 {
+  font-size: 2em;
+  color: #4f4c4c;
+  text-align: center;
+}
+
+.input-box {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  border-bottom: 2px solid #ffffff;
+  margin: 30px 0;
+}
+
+.input-box label {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  font-size: 1em;
+  color: #4f4c4c;
+  font-weight: 500;
+  pointer-events: none;
+  transition: .5s;
+}
+
+.input-box input:focus ~ label,
+.input-box input:valid ~ label {
+  top: -5px;
+}
+
+.input-box input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  color: #4f4c4c;
+  font-weight: 700;
+  padding: 0 35px 0 5px;
+}
+
+.wrapper .icon-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45px;
+  height: 45px;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius: 20px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.icon-image-close {
+  width: 2em;
+  height: 2em;
+}
+
+.icon-image {
+  position: absolute;
+  right: 8px;
+  top: 16px;
+  width: 20px;
+  height: 20px;
+}
+
+.remember-forgot {
+  font-size: .9em;
+  color: #4f4c4c;
+  font-weight: 500;
+  margin: -15px 0 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.remember-forgot label input {
+  accent-color: #a2e7e7;
+  margin-right: 3px;
+}
+
+.remember-forgot a {
+  color: #4f4c4c;
+  text-decoration: none;
+}
+
+.btn {
+  width: 100%;
+  height: 45px;
+  background: white;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1em;
+  color: #074242;
+  font-weight: 500;
+}
+
+.login-register {
+  font-size: .9em;
+  color: #4f4c4c;
+  text-align: center;
+  font-weight: 500;
+  margin: 25px 0 10px;
+}
+
+.login-register p a {
+  color: #4f4c4c;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.login-register p a:hover {
+  text-decoration: underline;
+}
+
+
+.select-box {
+  position: relative;
+  width: 100%;
+}
+
+.select-box select {
+  width: 100%;
+  height: 50px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  color: white;
+  font-weight: 500;
+  padding: 0 35px 0 5px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.select-box select::-ms-expand {
+  display: none;
+}
+
+.select-box::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 45px;
+  transform: translateY(-50%) rotate(0deg);
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  pointer-events: none;
+  transition: transform 0.3s;
+}
+
+.select-box select option {
+  background: white;
+  color: #074242;
+}
+
+.select-box.rotate::before {
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.select-box select:focus ~ .role-label,
+.select-box select:valid ~ .role-label {
+  top: -5px;
+  opacity: 1;
+}
+
+.select-box label {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  font-size: 1em;
+  color: #ffffff;
+  font-weight: 500;
+  pointer-events: none;
+  transition: .5s;
+}
+
+.role-label {
+  position: absolute;
+  top: -5px;
+  left: 5px;
+  font-size: 1em;
+  color: #ffffff;
+  font-weight: 500;
+  pointer-events: none;
+  transition: .5s;
+  opacity: 0;
+}

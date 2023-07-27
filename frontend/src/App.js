@@ -1,16 +1,22 @@
 import React from 'react';
 import './App.css';
 import Chat from "./components/Chat";
-import GameData from "./components/GameData";
+import Register from './components/Register';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 
 
 // <Chat /> accesses the Chat.js
 function App() {
+
+
   return (
-      <div className="App">
-        <Chat />
-        <GameData />
-      </div>
+<BrowserRouter>
+      <Routes>
+          <Route path="/" element={<Register />} />
+          <Route path="lobby" element={<Chat />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 export default App;
