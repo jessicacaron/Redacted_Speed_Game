@@ -4,6 +4,7 @@ import Chat from "./components/Chat";
 import Lobby from './components/Lobby';
 import Login from './components/Login';
 import Register from './components/Register';
+import GameClassic from "./components/GameClassic";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/lobby" element={<Lobby />} />
+          <Route path="/classic" element={<GameClassic />} />
       </Routes>
     </BrowserRouter>
   );

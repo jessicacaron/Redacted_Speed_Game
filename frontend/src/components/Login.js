@@ -167,7 +167,7 @@ function Login() {
                             Remember me</label>
                             <a href="#">Forgot Password?</a>
                         </div>
-                        <button type="submit" className="btn">Login</button>
+                        <button type="submit" className="button">Login</button>
 
                         <div className="login-register">
                             <p>Don't have an account? <button className="register-link" onClick={handleRegisterClick}>
@@ -228,7 +228,7 @@ function Login() {
                                 I agree to the terms & conditions</label>
                         </div>
 
-                        <button type="submit" className="btn">Register</button>
+                        <button type="submit" className="button">Register</button>
 
                         <div className="login-register">
                             <p>Already have an account? <button className="login-link" onClick={handleLoginButtonClick}>

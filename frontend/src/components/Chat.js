@@ -79,7 +79,7 @@ const Chat = () => {
         }
 
         setUsername(username);
-        
+
     };
 
     return (
@@ -120,6 +120,7 @@ const Chat = () => {
                     <option value="Bye">Bye</option>
                 </select>
                 <button
+                    className="button-send"
                     id="send"
                     title="Send Message!"
                     style={{ width: '100%', height: '30px' }}

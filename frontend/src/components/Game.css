@@ -1,0 +1,8 @@
+.board {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url("../../../frontend/public/assets/table/Table1.jpg") no-repeat center;
+    background-size: cover;
+}
