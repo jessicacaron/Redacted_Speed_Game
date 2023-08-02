@@ -11,7 +11,7 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 
 
 
-function Register() {
+function Login() {
     const navigate = useNavigate();
 
     //user login success
@@ -28,10 +28,10 @@ function Register() {
     const [isPopupActive, setIsPopupActive] = useState(true);
 
     //wrapper
-    const [isWrapperActive, setIsWrapperActive] = useState(true);
+    const [isWrapperActive, setIsWrapperActive] = useState(false);
 
     function handleRegisterClick() {
-        setIsWrapperActive(true);
+        navigate("/register");
     }
 
     function handleLoginClick() {
@@ -40,7 +40,7 @@ function Register() {
 
     //popup login click
     function handleLoginButtonClick() {
-        navigate("/");
+        setIsPopupActive(true);
     }
 
     //popup login close click
@@ -287,4 +287,4 @@ function Register() {
     );
 }
 
-export default Register;
+export default Login;
