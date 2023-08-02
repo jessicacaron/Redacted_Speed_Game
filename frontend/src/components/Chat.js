@@ -79,36 +79,12 @@ const Chat = () => {
         }
 
         setUsername(username);
-
-        // You can perform additional logic here if needed
-        alert(`Username submitted: ${username}`);
+        
     };
 
     return (
         <div className="row">
             <div className="col col-7"></div>
-            <div className="col col-5">
-                {isWrapperActive && isPopupActive && (
-                    <div className="background">
-                        <main
-                            className={`wrapper ${isWrapperActive ? 'active' : ''} ${isPopupActive ? 'active-popup' : ''
-                                }`}
-                        >
-                            <section className="form-box username">
-                                <h2>Choose Username</h2>
-                                <form onSubmit={handleUsernameSubmit}>
-                                    <div className="input-box">
-                                        <label htmlFor="username">Username</label>
-                                        <input type="text" placeholder="Enter your username" id="username" required />
-                                    </div>
-                                    <button type="submit" className="btn">
-                                        Submit
-                                    </button>
-                                </form>
-                            </section>
-                        </main>
-                    </div>
-                )}
 
                 <h1>Chat</h1>
 
@@ -152,7 +128,6 @@ const Chat = () => {
                 >
                     Send Message
                 </button>
-            </div>
         </div>
     );
 };

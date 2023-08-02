@@ -1,13 +1,10 @@
-//import './App.css';
-//import Welcome from './Welcome';
+import './LoginRegister.css';
 import lock from '../icons/lock-closed.svg';
-import close from '../icons/close.svg';
 import person from '../icons/person.svg';
-import people from '../icons/people.svg';
 import axios from 'axios';
 import { SHA256 } from 'crypto-js';
-import {useEffect, useRef, useState} from "react";
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -16,13 +13,6 @@ function Login() {
 
     //user login success
     const [user, setUser] = useState({ username: '', email: '' });
-    const [showWelcome, setShowWelcome] = useState(false);
-
-    //select icon listener
-    const [isSelectOpen, setIsSelectOpen] = useState(false);
-
-    //mousedown
-    const selectRef = useRef(null);
 
     //popup login
     const [isPopupActive, setIsPopupActive] = useState(true);
@@ -42,32 +32,6 @@ function Login() {
     function handleLoginButtonClick() {
         setIsPopupActive(true);
     }
-
-    //popup login close click
-    function handleCloseIconClick() {
-        setIsPopupActive(false);
-    }
-
-    //select icon rotation
-    function handleSelectClick() {
-        setIsSelectOpen(!isSelectOpen);
-    }
-
-    //mousedown use
-    function handleClickOutside(event) {
-        if (selectRef.current && !selectRef.current.contains(event.target)) {
-            setIsSelectOpen(false);
-        }
-    }
-
-    //mousedown event listener
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
 
     async function handleRegisterFormSubmit(event)  {
         event.preventDefault();
@@ -173,18 +137,12 @@ function Login() {
 
     return (
         <div className="App">
-            <header className="App-header">
-                <h2 className="logo">Logo</h2>
-                <nav className="navigation">
-                    <button className={`btn-login-popup ${isPopupActive ? 'active' : ''}`} onClick={handleLoginButtonClick}>
-                        Login</button>
-                </nav>
-            </header>
-
+            <div className="title">
+                <h1>SPEED</h1>
+                <h2>CLASSIC &</h2>
+                <h2>CALIFORNIA</h2>
+            </div>
             <main className={`wrapper ${isWrapperActive ? 'active' : ''} ${isPopupActive ? 'active-popup' : ''}`}>
-                <span className="icon-close" onClick={handleCloseIconClick}>
-                    <img className="icon-image-close" src={close} alt="Close Icon"/>
-                </span>
                 <section className="form-box login">
                     <h2>Login</h2>
                     <form onSubmit={handleLoginFormSubmit}>
@@ -222,7 +180,7 @@ function Login() {
 
 
                 <section className="form-box register">
-                    <h2>Registration</h2>
+                    <h2>Register</h2>
                     <form onSubmit={handleRegisterFormSubmit}>
                         <div className="input-box">
                             <span className="icon">
@@ -272,7 +230,7 @@ function Login() {
 
                         <button type="submit" className="btn">Register</button>
 
-                        <div className="">
+                        <div className="login-register">
                             <p>Already have an account? <button className="login-link" onClick={handleLoginButtonClick}>
                                 Login
                             </button>
@@ -282,7 +240,7 @@ function Login() {
                 </section>
 
             </main>
-            {showWelcome && user.username}
+            {user.username}
         </div>
     );
 }

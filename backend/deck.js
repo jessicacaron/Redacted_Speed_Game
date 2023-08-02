@@ -10,7 +10,7 @@ function createDeck() {
         }
     }
 
-    console.log("Initial Deck");
+    console.log("Initial Deck " + deck.length);
     console.log(deck); // Display deck to console for testing purposes
 
     return deck;
@@ -22,7 +22,7 @@ function shuffleDeck(deck) {
         const j = Math.floor(Math.random() * (i + 1));
         [deck[i], deck[j]] = [deck[j], deck[i]]; // Swap cards at indices i and j
     }
-    console.log("Shuffled Deck");
+    console.log("Shuffled Deck " + deck.length);
     console.log(deck);
 }
 

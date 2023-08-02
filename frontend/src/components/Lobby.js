@@ -8,7 +8,7 @@ const Lobby = () => {
     return (
         <div>
             <div className="row1">
-                <div className="col1"><h1><Register></Register></h1></div>
+                <div className="col1"><h1></h1></div>
                 <div className="col2"><Chat></Chat></div>
             </div>
         </div>     

@@ -46,14 +46,10 @@ for (let i = 0; i < 6; i++) {
     centerRightPile.push(card2);
 }
 
-// Draw initial cards for each player's hand (assuming they have 5 cards in their pile to start)
-drawCards(player1Pile, player1Hand, 5);
-drawCards(player2Pile, player2Hand, 5);
-
-console.log("Player 1 Hand: ", player1Pile.length, " cards");
+console.log("Player 1 Pile: ", player1Pile.length, " cards");
 console.log(player1Pile); // Display Player 1's pile in the console
 
-console.log("Player 2 Hand: ", player2Pile.length, " cards");
+console.log("Player 2 Pile: ", player2Pile.length, " cards");
 console.log(player2Pile); // Display Player 2's pile in the console
 
 console.log("Center Left Pile: ", centerLeftPile.length, " cards");
@@ -61,6 +57,16 @@ console.log(centerLeftPile); // Display the left center pile in the console
 
 console.log("Center Right Pile: ", centerRightPile.length, " cards");
 console.log(centerRightPile); // Display the right center pile in the console
+
+// Draw initial cards for each player's hand (assuming they have 5 cards in their pile to start)
+drawCards(player1Pile, player1Hand, 5);
+drawCards(player2Pile, player2Hand, 5);
+
+console.log("Player 1 Hand: ", player1Hand.length, " cards");
+console.log(player1Hand); // Display Player 1's pile in the console
+
+console.log("Player 2 Hand: ", player2Hand.length, " cards");
+console.log(player2Hand); // Display Player 2's pile in the console
 
 
 // Function checks valid move on central pile
@@ -117,13 +123,3 @@ function drawCards(playerPile, hand) {
         cardsToDraw--;
     }
 }
-
-// Example usage:
-// Assuming player1 plays the first card in their pile to the centerLeftPile
-playCard(player1Pile, centerLeftPile, true);
-
-console.log("Player 1 Hand: ", player1Pile.length, " cards");
-console.log(player1Pile); // Updated player1Pile after playing the card
-
-console.log("Center Left Pile: ", centerLeftPile.length, " cards");
-console.log(centerLeftPile); // Updated centerLeftPile after the valid move
