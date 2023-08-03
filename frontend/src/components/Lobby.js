@@ -5,6 +5,7 @@ import Register from './Register'
 import './Chat.css';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Room from './Room'
 
 
 function Lobby () {
@@ -25,6 +26,9 @@ function Lobby () {
                 <div className="button-div">
                     <button className="button-create" onClick={handleCreateClassicBtnClick}>Create Classic Game</button>
                 </div>
+            </div>
+            <div>
+                <Room/>
             </div>
         </div>     
     );
