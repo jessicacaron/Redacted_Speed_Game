@@ -86,7 +86,7 @@ function Register() {
         // Reset the form
         form.reset();
 
-        navigate("/lobby");
+        navigate(`/lobby?username=${username}`); // Redirect to lobby with username as query parameter
 
     }
 

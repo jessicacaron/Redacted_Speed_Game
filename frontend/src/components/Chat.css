@@ -2,17 +2,57 @@
 
 * {
     font-family: "museo-sans", sans-serif;
+    color: white;
+}
+
+.container {
+    position: relative;
+    width: 400px;
+    height: 800px;
+    background: transparent;
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, .5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container-messages {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: scroll;
+    padding: 20px 20px;
+}
+
+.divider {
+    background: white;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
 }
 
 button {
     background: cadetblue;
     color: white;
-    border-radius: 10px;
+    border-radius: 6px;
     padding: 10px;
-    border: 6px solid white;
+    border: none;
+    margin: 5px 0;
+    cursor: pointer;
 }
 
-.col1, .col2 {
-    max-width: 45%;
+.container-predefined {
+    width: 100%;
     display: flex;
+    flex-direction: column;
+    padding: 20px 40px;
+}
+
+.predefined-button {
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
 }

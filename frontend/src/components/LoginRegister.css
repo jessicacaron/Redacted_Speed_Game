@@ -18,10 +18,13 @@
 
 .title h1 {
     font-size: 5rem;
+    font-weight: 700;
 }
 
 .title h2 {
     font-size: 2rem;
+    font-weight: 700;
+
 }
 
 .App {

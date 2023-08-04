@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import './Chat.css';
+import {useLocation} from "react-router-dom";
 
 const Chat = () => {
     const [messages, setMessages] = useState([]);
-    const [selectedMessage, setSelectedMessage] = useState('');
     const messagesRef = useRef(null);
     const socketRef = useRef(null);
-    const [username, setUsername] = useState(''); //test username
     const [isUsernameSubmitted, setIsUsernameSubmitted] = useState(false);
-    const [isWrapperActive, setIsWrapperActive] = useState(true);
-    const [isPopupActive, setIsPopupActive] = useState(true);
+
+    const location =  useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const username = queryParams.get("username") || "Guest"; // Guest as default if no  username is found
 
     useEffect(() => {
-        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
 
         // Connect to the Socket.IO backend
         socketRef.current = io.connect('http://localhost:6969');
@@ -31,7 +31,7 @@ const Chat = () => {
                 socketRef.current.disconnect();
             }
         };
-    }, [username]); // add 'username' as a dependency
+    }, [username], [messages]); // add 'username' as a dependency
 
     useEffect(() => {
         if (isUsernameSubmitted) {
@@ -40,10 +40,16 @@ const Chat = () => {
     }, [username, isUsernameSubmitted]);
 
     const showMessage = (message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
+        if (typeof message === 'string') {
+            // Handle plain text messages
+            setMessages((prevMessages) => [...prevMessages, message]);
+        } else {
+            // Handle messages with usernames
+            setMessages((prevMessages) => [...prevMessages, `${message.user}: ${message.message}`]);
+        }
     };
 
-    const sendMessage = () => {
+    const sendMessage = (message) => {
         if (!socketRef.current) {
             showMessage('No WebSocket connection.');
             return;
@@ -52,83 +58,42 @@ const Chat = () => {
         // Emit 'chatMessage' event to the backend with the user's username
         socketRef.current.emit('chatMessage', {
             user: username,
-            message: selectedMessage,
+            message: message,
         });
-
-        showMessage(`${username}: ${selectedMessage}`);
-        setSelectedMessage('');
     };
 
-    const handleSelectChange = (event) => {
-        setSelectedMessage(event.target.value);
-    };
-
-    //username stuff
-    async function handleUsernameSubmit(event) {
-        event.preventDefault();
-        setIsWrapperActive(false);
-        setIsPopupActive(false);
-
-        const form = event.target;
-        const username = form.elements.username.value;
-
-        // Perform any necessary validation before submitting the username
-        if (username.trim() === '') {
-            alert('Please enter a username.');
-            return;
-        }
-
-        setUsername(username);
-
-    };
+    const predefinedMessages = ['Hello', 'Good game', "Let's start", "Let's play Classic Speed", "Let's play California Speed", 'Bye'];
 
     return (
-        <div className="row">
-            <div className="col col-7"></div>
+        <div className="container">
 
-                <h1>Chat</h1>
-
-                <pre
-                    id="messages"
-                    style={{ height: '400px', overflow: 'scroll' }}
-                    ref={messagesRef}
-                >
+            <div className="container-messages">
+                <pre id="messages" ref={messagesRef}>
                     {messages.map((message, index) => (
                         <React.Fragment key={index}>
                             {index > 0 && '\n\n'}
-                            {message.user ? `${message.user}: ${message.message}` : message}
+                            {message.user ? (
+                                <button className="message-button" onClick={() => sendMessage(message.message)}>
+                                    {message.user}: {message.message}
+                                </button>
+                            ) : (
+                                message
+                            )}
                         </React.Fragment>
                     ))}
                 </pre>
-                <select
-                    id="messageBox"
-                    value={selectedMessage}
-                    onChange={handleSelectChange}
-                    style={{
-                        display: 'block',
-                        width: '100%',
-                        marginBottom: '10px',
-                        padding: '10px',
-                    }}
-                >
-                    <option value="">Select a message</option>
-                    <option value="Hello">Hello</option>
-                    <option value="Good game">Good game</option>
-                    <option value="Let's start">Let's start</option>
-                    <option value="Let's Play Speed Classic">Let's Play Speed Classic</option>
-                    <option value="Let's Play California Speed">Let's Play California Speed</option>
-                    <option value="Bye">Bye</option>
-                </select>
-                <button
-                    className="button-send"
-                    id="send"
-                    title="Send Message!"
-                    style={{ width: '100%', height: '30px' }}
-                    onClick={sendMessage}
-                    disabled={!selectedMessage}
-                >
-                    Send Message
-                </button>
+            </div>
+
+            <div className="divider"></div>
+
+            <div className="container-predefined">
+                {predefinedMessages.map((message, index) => (
+                    <button key={index} className="predefined-button" onClick={() => sendMessage(message)}>
+                        {message}
+                    </button>
+                ))}
+            </div>
+
         </div>
     );
 };

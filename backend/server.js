@@ -48,7 +48,7 @@ io.on("connection", (socket) => {
     // Join a chat room or perform any necessary chat-related logic
     socket.join("chatRoom");
 
-    // Broadcast a message to all users in the chat room
+    // Send "System: joined the chat" message to other users in the chat room
     socket.to("chatRoom").emit("chatMessage", {
       user: "System",
       message: `${username} joined the chat`,
@@ -56,11 +56,14 @@ io.on("connection", (socket) => {
   });
 
   socket.on("chatMessage", (message) => {
-    // Handle the received chat message and broadcast it to all users in the chat room
-    socket.to("chatRoom").emit("chatMessage", {
+    // Handle the received chat message
+    const formattedMessage = {
       user: message.user,
       message: message.message,
-    });
+    };
+
+    // Broadcast the new message to all users in the chat room
+    io.to("chatRoom").emit("chatMessage", formattedMessage);
   });
 
   // Speed card game feature

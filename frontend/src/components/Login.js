@@ -120,9 +120,8 @@ function Login() {
             // set is authenticated to true
             setIsPopupActive(false);
 
-            // setShowWelcome(true);
             //navigate to lobby
-            navigate("/lobby");
+            navigate(`/lobby?username=${username}`); // Redirect to lobby with username as query parameter
 
 
         } catch (error) {
