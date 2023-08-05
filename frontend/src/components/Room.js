@@ -1,67 +1,112 @@
 import React, { useState, useEffect, useRef } from "react";
+import "./Room.css";
 import io from "socket.io-client";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 const socket = io.connect('http://localhost:6969')
 
-const GameList = () => {
-    let [gameList, setGameList] = useState([]);
-    let [gameNumber, setGameNumber] = useState(0)
 
-    function addNewGame() {
-        //gameList[gameNumber] = <Room/>;
-        console.log('got here')
-        //console.log(gameList);
-        
-        setGameNumber = gameNumber++;
-        //Room.setPlayer1Name(localStorage.getItem('user'));
-        //console.log(Room.player1Name);
-
-    }
-
-
-    return (
-        <div>
-            <h1>Games Avaible</h1>
-            <button onClick={()=>addNewGame()}>Create Game</button>
-            <div>{gameList}</div>
-            <div><Room></Room></div>
-        </div>
-    )
-}
 
 const Room = () => {
-    const [gameType, setGameType] = useState('none');
-    const [player1Name, setPlayer1Name] = useState('Player1');
-    const [player2Name, setPlayer2Name] = useState('Player2');
-    const [player1Status, setPlayer1Status] = useState('...waiting');
-    const [player2Status, setPlayer2Status] = useState('...waiting');
+    const [socket, setSocket] = useState(null);
+    const [rooms, setRooms] = useState([]);
+    const [joinedRoom, setJoinedRoom] = useState(null);
+    const [waitingRooms, setWaitingRooms] = useState([]);
 
-    const [room, setRoom] = useState("");
-    
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const username = queryParams.get('username') || 'Guest';
 
-    const joinRoom = () => {
-        if (room !== "") {
-          socket.emit("join_room", room);
-                    
+    useEffect(() => {
+        // Connect to the Socket.IO backend
+        const newSocket = io.connect('http://localhost:6969');
+        setSocket(newSocket);
+
+        // Listen for 'roomList' event to get the list of rooms
+        newSocket.on('roomList', (rooms) => {
+            setRooms(rooms);
+        });
+
+        // Listen for 'waitingRooms' event to get the list of waiting rooms
+        newSocket.on('waitingRooms', (waitingRooms) => {
+            setWaitingRooms(waitingRooms);
+        });
+
+        // Request the list of waiting rooms from the server
+        newSocket.emit('getWaitingRooms');
+
+        // Listen for 'userJoinedRoom' event to update joinedRoom state
+        newSocket.on('userJoinedRoom', (room) => {
+            setJoinedRoom(room);
+        });
+
+        return () => {
+            if (newSocket) {
+                newSocket.disconnect();
+            }
+        };
+    }, []);
+
+    const handleCreateRoom = (roomType) => {
+        if (socket) {
+            // Emit 'createRoom' event to the backend with the user's username and room type
+            socket.emit('createRoom', { username, roomType });
         }
-      }
+    };
+
+    const handleJoinRoom = (roomId) => {
+        if (socket) {
+            // Emit 'joinRoom' event to the backend with the user's username and room name
+            socket.emit('joinRoom', { username, roomId });
+        }
+    };
 
     return (
-        <div>
-            <header>{gameType}</header>
-            <rt>
-                <rd>{player1Name}</rd>
-                <rd>{player1Status}</rd>
-            </rt>
-            <rt>
-                <rd>{player2Name}</rd>
-                <td>{player2Status}</td>
-            </rt>
-            <button>Join Game</button>
+        <div className="room-container">
+            <div className="create-room">
+                <h2>Create a Room</h2>
+                <p>Your username: {username}</p>
+                <button onClick={() => handleCreateRoom('Classic')}>Create Classic Room</button>
+                <button onClick={() => handleCreateRoom('California')}>Create California Room</button>
+            </div>
+
+            {/* Display the list of available rooms */}
+            {waitingRooms.length > 0 && (
+                <div className="available-rooms">
+                    <h2>Available Rooms</h2>
+                    {waitingRooms.map((room) => (
+                        <div key={room.roomId} className="available-room-item">
+                            <span>{room.name}</span>
+                            <p>Room Type: {room.type}</p>
+                            <p>Users in this room:</p>
+                            <ul>
+                                {room.users.map((user) => (
+                                    <li key={user}>{user}</li>
+                                ))}
+                            </ul>
+
+                            <button onClick={() => handleJoinRoom(room.name)}>Join</button>
+
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {joinedRoom && (
+                <div className="waiting-room">
+                    <h2>Waiting Room: {joinedRoom.name}</h2>
+                    <p>Room Type: {joinedRoom.type}</p>
+                    <p>Users in this room:</p>
+                    <ul>
+                        {joinedRoom.users.map((user) => (
+                            <li key={user}>{user}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
-    )
-}
+    );
+};
 
-
-export default GameList;
+export default Room;

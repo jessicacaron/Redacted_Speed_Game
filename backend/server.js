@@ -7,6 +7,7 @@ require("dotenv").config();
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const secretKey = "secret"; // Replace with your own secret key
+const { v4: uuidv4 } = require('uuid');
 
 const PORT = 6969;
 const app = express();
@@ -39,9 +40,17 @@ mongoose
     console.error("Failed to connect to MongoDB Atlas", error);
   });
 
+
+// Define rooms array to store created rooms
+const rooms = [];
+
 // Connect to socket
 io.on("connection", (socket) => {
   console.log("A user connected");
+
+  socket.on('disconnect', () => {
+    console.log('A user disconnected.');
+  });
 
   // Chat feature
   socket.on("joinChat", (username) => {
@@ -66,27 +75,66 @@ io.on("connection", (socket) => {
     io.to("chatRoom").emit("chatMessage", formattedMessage);
   });
 
-  // Speed card game feature
-  socket.on("joinGame", (gameId) => {
-    // Join the specific game room or perform any necessary game-related logic
-    socket.join(gameId);
+  // ROOMS
+  // Send the list of rooms to the newly connected user
+  socket.emit('roomList', rooms.map((room) => room.name));
 
-    // Emit a message or perform any necessary actions related to joining a game
-    socket.emit("gameJoined", gameId);
+  // Send the list of waiting rooms to the newly connected user
+  socket.emit('waitingRooms', rooms.filter((room) => room.users.length > 0));
+
+  socket.on('createRoom', ({ username, roomType }) => {
+    // Generate a random room ID
+    const roomId = Math.random().toString(36).substr(2, 6).toUpperCase();
+    const roomName = `${roomType} - ${roomId}`;
+
+    // Add the new room to the rooms array
+    const newRoom = {
+      name: roomName,
+      type: roomType,
+      users: [username],
+    };
+
+    rooms.push(newRoom);
+
+    // Broadcast the new room to all users
+    io.emit('roomList', rooms.map((room) => room.name));
+
+    // Notify the user that they joined the room
+    socket.emit('userJoinedRoom', newRoom);
+
+    // Notify other users that a room was created (except the creator)
+    socket.broadcast.emit('userJoinedRoom', newRoom);
+
+    // Notify the creator that they joined their own room
+    socket.emit('userJoinedRoom', newRoom);
+
+    // Broadcast the updated list of waiting rooms to all users
+    io.emit('waitingRooms', rooms.filter((room) => room.users.length > 0));
   });
 
-  // Game Data stuff for testing
-  socket.on("gameData", (data) => {
-    // Handle the received game data
-    console.log("Received game data:", data);
+  socket.on('joinRoom', ({ username, roomId }) => {
+    // Find the room with the given roomId
+    const targetRoom = rooms.find((room) => room.name === roomId);
 
-    // Broadcast the game data to all users in the game room
-    io.emit("gameData", data);
-  });
+    if (targetRoom) {
+      // Add the user to the room's user list
+      targetRoom.users.push(username);
 
-  socket.on("startGame", (gameId) => {
-    // Handle the start game event and emit it to all users in the game room
-    io.to(gameId).emit("gameStarted");
+      // Notify the user that they joined the room
+      socket.emit('userJoinedRoom', targetRoom);
+
+      // Notify other users in the room that a new user joined
+      socket.to(roomId).emit('userJoinedRoom', targetRoom);
+
+      // Notify the creator that a new user joined their room
+      socket.broadcast.emit('userJoinedRoom', targetRoom);
+
+      // Broadcast the updated user list to all users
+      io.emit('roomList', rooms.map((r) => r.name));
+
+      // Broadcast the updated list of waiting rooms to all users
+      io.emit('waitingRooms', rooms.filter((room) => room.users.length > 0));
+    }
   });
 
   // Handle disconnect event
