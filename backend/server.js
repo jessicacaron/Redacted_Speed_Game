@@ -12,6 +12,8 @@ const { v4: uuidv4 } = require('uuid');
 const PORT = 6969;
 const app = express();
 const server = http.createServer(app);
+const REQUIRED_PLAYERS = 2;
+const COUNTDOWN_DURATION = 5; // in seconds
 
 const io = new Server(server, {
   cors: {
@@ -43,6 +45,23 @@ mongoose
 
 // Define rooms array to store created rooms
 const rooms = [];
+
+
+// Define a function to start the game countdown for a room
+function startGameCountdown(room) {
+  console.log("startGameCountdown triggered");
+  console.log("room data received: ", room);
+  console.log("room users length: ", room.users.length);
+  console.log("room name to emit: ", room.name);
+
+  if (room.users.length >= REQUIRED_PLAYERS) {
+    console.log("if statement triggered\n ########");
+    io.to(room.name).emit("startCountdown");
+    setTimeout(() => {
+      io.to(room.name).emit("countdownEnd");
+    }, COUNTDOWN_DURATION * 1000);
+  }
+}
 
 // Connect to socket
 io.on("connection", (socket) => {
@@ -92,9 +111,13 @@ io.on("connection", (socket) => {
       name: roomName,
       type: roomType,
       users: [username],
+      usersReady: [],
     };
-
     rooms.push(newRoom);
+
+    // Join user that created room
+    socket.join(roomName);
+    console.log(`Client ${socket.id} joined room ${roomName}`);
 
     // Broadcast the new room to all users
     io.emit('roomList', rooms.map((room) => room.name));
@@ -106,19 +129,28 @@ io.on("connection", (socket) => {
     socket.broadcast.emit('userJoinedRoom', newRoom);
 
     // Notify the creator that they joined their own room
-    socket.emit('userJoinedRoom', newRoom);
+    //socket.emit('userJoinedRoom', newRoom);
 
     // Broadcast the updated list of waiting rooms to all users
     io.emit('waitingRooms', rooms.filter((room) => room.users.length > 0));
   });
 
+
+  // JOINING ROOMS
   socket.on('joinRoom', ({ username, roomId }) => {
+    console.log("room name received from frontend: ", roomId);
     // Find the room with the given roomId
     const targetRoom = rooms.find((room) => room.name === roomId);
+    console.log("targetRoom name: ", targetRoom.name);
+    console.log("######## \n");
 
     if (targetRoom) {
       // Add the user to the room's user list
       targetRoom.users.push(username);
+
+      // Join the user to the room
+      socket.join(targetRoom.name);
+      console.log(`Client ${socket.id} joined room ${targetRoom.name}`);
 
       // Notify the user that they joined the room
       socket.emit('userJoinedRoom', targetRoom);
@@ -134,6 +166,32 @@ io.on("connection", (socket) => {
 
       // Broadcast the updated list of waiting rooms to all users
       io.emit('waitingRooms', rooms.filter((room) => room.users.length > 0));
+    }
+  });
+
+
+  // READY UP
+  socket.on("readyUp", ({ username, room }) => {
+    // Find the room with the given name
+    const targetRoom = rooms.find((r) => r.name === room);
+    console.log("found room from targetRoom.name: ", targetRoom.name);
+    console.log("room name received from front end: ", room);
+
+    if (targetRoom) {
+      // Add the user to the room's usersReady list if they're not already added
+      if (!targetRoom.usersReady.includes(username)) {
+        targetRoom.usersReady.push(username);
+      }
+
+      // Broadcast the updated usersReady list to all users in the room
+      io.to(room).emit("readyUp", targetRoom);
+
+      // Start the countdown if all players are ready
+      console.log("target room users ready length: ", targetRoom.usersReady.length);
+      if (targetRoom.usersReady.length >= REQUIRED_PLAYERS){
+        startGameCountdown(targetRoom);
+      }
+      console.log("\n ############# \n");
     }
   });
 

@@ -1,22 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Room.css";
 import io from "socket.io-client";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const socket = io.connect('http://localhost:6969')
-
-
+const COUNTDOWN_DURATION = 5; // in seconds
 
 const Room = () => {
     const [socket, setSocket] = useState(null);
     const [rooms, setRooms] = useState([]);
     const [joinedRoom, setJoinedRoom] = useState(null);
     const [waitingRooms, setWaitingRooms] = useState([]);
+    const [readyUsers, setReadyUsers] = useState([]);
+    const [countdownStarted, setCountdownStarted] = useState(false); // tracks if countdown from back end has started
+    const [startButtonClicked, setStartButtonClicked] = useState(false);
 
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const username = queryParams.get('username') || 'Guest';
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Connect to the Socket.IO backend
@@ -41,24 +42,73 @@ const Room = () => {
             setJoinedRoom(room);
         });
 
+        // Listen for 'readyUp' event to update the readyUsers state
+        newSocket.on("readyUp", (room) => {
+            setReadyUsers(room.usersReady);
+        });
+
+        // Listen for 'startCountdown' event to indicate that countdown has started
+        newSocket.on("startCountdown", () => {
+            console.log("\nReceived countdown started from server.");
+            setCountdownStarted(true);
+        });
+
+        // Listen for 'countdownEnd' event to navigate to /classic after the countdown
+        newSocket.on("countdownEnd", () => {
+            console.log("Received countdown ended from server.");
+            navigate("/classic");
+        });
+
         return () => {
             if (newSocket) {
                 newSocket.disconnect();
             }
         };
-    }, []);
+    }, [navigate]);
+
+
+    // Render countdown when countdownStarted is set to true
+    useEffect(() => {
+        if (countdownStarted) {
+            let countdownValue = COUNTDOWN_DURATION;
+            const interval = setInterval(() => {
+                countdownValue -= 1;
+                if (countdownValue <= 0) {
+                    clearInterval(interval);
+                }
+                const countdownElement = document.querySelector('.waiting-room p');
+                if (countdownElement) {
+                    countdownElement.innerText = `Game starting in: ${countdownValue}`;
+                }
+            }, 1000);
+
+            // Cleanup the interval when component unmounts or countdown ends
+            return () => clearInterval(interval);
+        }
+    }, [countdownStarted]);
 
     const handleCreateRoom = (roomType) => {
         if (socket) {
             // Emit 'createRoom' event to the backend with the user's username and room type
-            socket.emit('createRoom', { username, roomType });
+            socket.emit('createRoom', {username, roomType});
         }
     };
 
     const handleJoinRoom = (roomId) => {
         if (socket) {
+            console.log("room name being joined into: ", roomId);
             // Emit 'joinRoom' event to the backend with the user's username and room name
             socket.emit('joinRoom', { username, roomId });
+        }
+    };
+
+    const handleReadyUp = () => {
+        console.log("frontend readyUp triggered")
+        if (socket && joinedRoom) {
+            setStartButtonClicked(true);
+            // Emit 'readyUp' event to the backend with the user's username and room name
+            socket.emit("readyUp", { username, room: joinedRoom.name });
+            console.log("room data being sent from frontend: ", joinedRoom.name);
         }
     };
 
@@ -100,9 +150,22 @@ const Room = () => {
                     <p>Users in this room:</p>
                     <ul>
                         {joinedRoom.users.map((user) => (
-                            <li key={user}>{user}</li>
+                            <li key={user}>
+                                {user} {readyUsers.includes(user) && "(Ready)"}
+                            </li>
                         ))}
                     </ul>
+
+                    <button
+                        onClick={() => handleReadyUp()}
+                        disabled={readyUsers.includes(username) || startButtonClicked}
+                    >
+                        {startButtonClicked ? (
+                            countdownStarted ? "Starting Soon." : "Waiting for others..."
+                        ) : (
+                            "Start"
+                        )}
+                    </button>
                 </div>
             )}
         </div>
