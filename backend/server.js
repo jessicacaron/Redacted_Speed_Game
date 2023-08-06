@@ -8,6 +8,7 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const secretKey = "secret"; // Replace with your own secret key
 const { v4: uuidv4 } = require('uuid');
+const { log } = require("console");
 
 const PORT = 6969;
 const app = express();
@@ -63,19 +64,22 @@ function startGameCountdown(room) {
   }
 }
 
-// Connect to socket
+// Connect to a socket, socket represents a user
 io.on("connection", (socket) => {
-  console.log("A user connected");
-
-  socket.on('disconnect', () => {
-    console.log('A user disconnected.');
-  });
+  //variable holder for a connected name.
+  let connectedName;
 
   // Chat feature
   socket.on("joinChat", (username) => {
+
+    
+
     // Join a chat room or perform any necessary chat-related logic
     socket.join("chatRoom");
 
+    console.log(`A user ${username} connected`);
+    // Storing connected user's name into a variable
+    connectedName = username;
     // Send "System: joined the chat" message to other users in the chat room
     socket.to("chatRoom").emit("chatMessage", {
       user: "System",
@@ -117,7 +121,8 @@ io.on("connection", (socket) => {
 
     // Join user that created room
     socket.join(roomName);
-    console.log(`Client ${socket.id} joined room ${roomName}`);
+    //console.log(`Client ${socket.id} joined room ${roomName}`);
+    console.log(`User ${username} joined room ${roomName}`);
 
     // Broadcast the new room to all users
     io.emit('roomList', rooms.map((room) => room.name));
@@ -169,7 +174,6 @@ io.on("connection", (socket) => {
     }
   });
 
-
   // READY UP
   socket.on("readyUp", ({ username, room }) => {
     // Find the room with the given name
@@ -195,11 +199,10 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Handle disconnect event
+  // Handle the actual disconnect event
   socket.on("disconnect", () => {
-    console.log("A user disconnected");
-
-    // Perform any necessary cleanup or logic when a user disconnects
+    console.log(`A user ${connectedName} disconnected`);
+    socket.disconnect();
   });
   
 });
@@ -263,7 +266,7 @@ app.post("/auth/ULogin", async (req, res) => {
     const user = await User.findOne({ username });
 
     //testing
-    console.log("Username received from client: " + { username });
+    console.log("Username received from client: " + username );
 
     if (!user) {
       // User not found
