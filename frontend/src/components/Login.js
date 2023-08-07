@@ -7,9 +7,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
+let showError = "errorOff";
 
 function Login() {
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState("");
+
+    //document.getElementById("errorMessage").style.display = "none";
+
 
     //user login success
     const [user, setUser] = useState({ username: '', email: '' });
@@ -84,7 +89,7 @@ function Login() {
         }
 
         // Reset the form
-        form.reset();
+        //form.reset();
 
         navigate("/lobby");
 
@@ -127,10 +132,11 @@ function Login() {
         } catch (error) {
             console.error('Error logging user', error);
             // Handle error during login
+            setErrorMessage("Incorrect Username or Password!");
         }
 
         // Reset the form
-        form.reset();
+        //form.reset();
     }
 
 
@@ -167,7 +173,7 @@ function Login() {
                             <a href="#">Forgot Password?</a>
                         </div>
                         <button type="submit" className="button">Login</button>
-
+                        {errorMessage && <div className="error"> {errorMessage} </div>}
                         <div className="login-register">
                             <p>Don't have an account? <button className="register-link" onClick={handleRegisterClick}>
                                 Register

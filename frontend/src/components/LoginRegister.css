@@ -194,3 +194,8 @@
 .login-register p button:hover {
     text-decoration: underline;
 }
+
+.error{
+    margin-top: 1rem;
+    color: red;
+}
