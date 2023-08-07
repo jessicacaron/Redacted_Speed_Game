@@ -2,6 +2,8 @@ import './Game.css';
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import { useNavigate } from "react-router-dom";
+import ClassicGameBoard from './ClassicGameBoard';
+import './ClassicGameBoard.css'
 
 function GameClassic() {
   const [connected, setConnected] = useState(false);
@@ -49,6 +51,7 @@ function GameClassic() {
           <h1>Connecting...</h1>
         </div>
       )}
+      <div>{ClassicGameBoard()}</div>
     </main>
   );
 }

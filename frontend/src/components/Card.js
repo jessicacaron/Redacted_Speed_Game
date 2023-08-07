@@ -14,7 +14,7 @@ const Card = ({ rank, suit, isFaceUp }) => {
 
     //style for back card to not be huge
     const cardStyle = {
-        width: '200px', // Adjust the width to desired size
+        width: '100px', // Adjust the width to desired size
         height: 'auto', // Automatically adjust the height to maintain aspect ratio
     };
 
