@@ -1,9 +1,19 @@
 .background {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 40px;
     min-height: 100vh;
     background: url("../../../frontend/public/assets/background/Main.png") no-repeat center;
     background-size:cover;
+    width: 100%;
+}
+
+.room {
+    display: flex;
+    width: 70%;
+}
+
+.chat {
+    display: flex;
+    width: 30%;
+    justify-content: center;
 }

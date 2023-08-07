@@ -113,61 +113,77 @@ const Room = () => {
     };
 
     return (
-        <div className="room-container">
-            <div className="create-room">
+        <div className="lobby-container">
+            <div className="create">
+            <p className="create-username">Your username: {username}</p>
+            <br></br>
                 <h2>Create a Room</h2>
-                <p>Your username: {username}</p>
-                <button onClick={() => handleCreateRoom('Classic')}>Create Classic Room</button>
-                <button onClick={() => handleCreateRoom('California')}>Create California Room</button>
-            </div>
-
+                <div className="create-button">
+                    <h3>Classic</h3>
+                    <button onClick={() => handleCreateRoom('Classic')}>Create</button>
+                </div>
+                <div className="create-button">
+                    <h3>California</h3>
+                    <button onClick={() => handleCreateRoom('California')}>Create</button>
+                </div>
+          </div>
+          <hr></hr>
             {/* Display the list of available rooms */}
-            {waitingRooms.length > 0 && (
-                <div className="available-rooms">
-                    <h2>Available Rooms</h2>
-                    {waitingRooms.map((room) => (
-                        <div key={room.roomId} className="available-room-item">
-                            <span>{room.name}</span>
-                            <p>Room Type: {room.type}</p>
-                            <p>Users in this room:</p>
-                            <ul>
-                                {room.users.map((user) => (
-                                    <li key={user}>{user}</li>
-                                ))}
-                            </ul>
+            <div className="rooms">
+                {waitingRooms.length > 0 && (
+                    <div className="available-rooms">
+                        <h2 className="">Available Rooms</h2>
 
-                            <button onClick={() => handleJoinRoom(room.name)}>Join</button>
+                        {waitingRooms.map((room) => (
+                            <div key={room.roomId} className="available-room-item">
+                            <h3 className="room-type-header">{room.type} Speed</h3>
 
-                        </div>
-                    ))}
-                </div>
-            )}
+                                <span>{room.name}</span>
+                                <h5 >Users in this room:</h5>
+                                <ul className="users-list">
+                                    {room.users.map((user) => (
+                                        <li key={user}>{user}</li>
+                                    ))}
+                                </ul>
 
-            {joinedRoom && (
-                <div className="waiting-room">
-                    <h2>Waiting Room: {joinedRoom.name}</h2>
-                    <p>Room Type: {joinedRoom.type}</p>
-                    <p>Users in this room:</p>
-                    <ul>
-                        {joinedRoom.users.map((user) => (
-                            <li key={user}>
-                                {user} {readyUsers.includes(user) && "(Ready)"}
-                            </li>
+                                <button onClick={() => handleJoinRoom(room.name)}>Join</button>
+                                <button onClick={() => handleJoinRoom(room.name)}>Watch</button>
+
+                            </div>
                         ))}
-                    </ul>
+                    </div>
+                )}
+            </div>
+            
+            <div className="lobby">
+                {joinedRoom && (
+                    <div className="waiting-room">
+                        <h2>Waiting Room: {joinedRoom.name}</h2>
+                        <p>Room Type: {joinedRoom.type}</p>
+                        <p>Users in this room:</p>
+                        <ul>
+                            {joinedRoom.users.map((user) => (
+                                <li key={user}>
+                                    {user} {readyUsers.includes(user) && "(Ready)"}
+                                </li>
+                            ))}
+                        </ul>
 
-                    <button
-                        onClick={() => handleReadyUp()}
-                        disabled={readyUsers.includes(username) || startButtonClicked}
-                    >
-                        {startButtonClicked ? (
-                            countdownStarted ? "Starting Soon." : "Waiting for others..."
-                        ) : (
-                            "Start"
-                        )}
-                    </button>
-                </div>
-            )}
+                        <button
+                            onClick={() => handleReadyUp()}
+                            disabled={readyUsers.includes(username) || startButtonClicked}
+                        >
+                            {startButtonClicked ? (
+                                countdownStarted ? "Starting Soon." : "Waiting for others..."
+                            ) : (
+                                "Start"
+                            )}
+                        </button>
+                    </div>
+                )}
+            
+            </div>                            
+            
         </div>
     );
 };

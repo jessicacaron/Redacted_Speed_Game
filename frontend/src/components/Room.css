@@ -1,0 +1,74 @@
+h2 {
+    font-size: 3em;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.lobby-container {
+    display: block;
+    padding: 1rem;
+    min-width: 100%;
+}
+.create {
+    width:100%;
+    margin: 1rem;
+    margin-bottom: 3rem;
+    display: block;
+    
+}
+
+.create:after {
+    content:"";
+    display:block;
+    clear:both;
+}
+.create-username {
+    float: right;
+    padding-right: 2rem;
+    font-size: medium;
+    color: rgb(142, 212, 212);
+}
+
+.create-button {
+    content:"";
+    margin: 1rem;
+    float: left;
+}
+
+.rooms {
+    width: 100%;
+    margin: 1rem;
+
+}
+
+.available-room-item {
+    border: 2px solid white;
+    background: rgba(0, 0, 0, 0.5);    
+    margin: 2rem;
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.available-room-item > h5 {
+    margin-top: 3rem;
+}
+
+.available-room-item > button {
+    margin-top: 2rem;
+    margin-left: 1rem;
+}
+
+.room-type-header {
+    float: right;
+    color: white;
+    font-size: x-large;
+}
+
+.users-list {
+    list-style: none;
+}
+
+.users-list > li {
+    margin-left: 2rem;
+    margin-top: .4rem;
+}
