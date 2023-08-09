@@ -1,14 +1,18 @@
 import './Game.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import io from 'socket.io-client';
 import { useNavigate } from "react-router-dom";
 import ClassicGameBoard from './ClassicGameBoard';
 import './ClassicGameBoard.css'
+import { AppContext } from '../App'
+
+
 
 function GameClassic() {
   const [connected, setConnected] = useState(false);
   const navigate = useNavigate();
-
+  let { loggedInUser } = useContext(AppContext);
+  
   const [playerUsername, setPlayerUsername] = useState('');
 
   useEffect(() => {
@@ -44,6 +48,9 @@ function GameClassic() {
           <h1>Classic Speed Game</h1>
           {/* rest of game components here */}
           <button onClick={handleExitClick}>Exit</button>
+          <h5>User:</h5>
+          <h2 className='gameboard-username'>{loggedInUser}</h2>
+
         </div>
       ) : (
         <div>

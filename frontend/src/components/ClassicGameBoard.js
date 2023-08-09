@@ -1,11 +1,17 @@
 import React from 'react';
 import Card from './Card'
-import { useState } from "react";
+import { useState, useContext } from "react";
+
 
 const ClassicGameBoard = () => {
+
+
+
     const [player1DeckSize, setPlayer1DeckSize] = useState(20);
     const [player2DeckSize, setPlayer2DeckSize] = useState(20);
     const [reshufflePileSize, setReshufflePileSize] = useState(5);
+
+
     return (
         <div class="grid-container">
         <div class="grid-item">{Card(5,'SPADE',true)}</div>

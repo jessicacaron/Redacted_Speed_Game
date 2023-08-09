@@ -11,3 +11,15 @@
     font-size: 30px;
     text-align: center;
   }
+
+  .gameboard-username {
+    margin-top: 1rem;
+    font-size: xx-large;
+    font-weight: lighter;
+    color:aquamarine;
+  }
+
+  h5 {
+    margin-top: 5rem;
+    font-size: large;
+  }

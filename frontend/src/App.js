@@ -1,27 +1,30 @@
-import React from 'react';
+import React, { useState, createContext } from 'react'
 import './App.css';
-import Chat from "./components/Chat";
 import Lobby from './components/Lobby';
 import Login from './components/Login';
 import Register from './components/Register';
 import GameClassic from "./components/GameClassic";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Router } from "react-router-dom";
 
 
+export const AppContext = createContext();
 
-// <Chat /> accesses the Chat.js
+
 function App() {
+  let [loggedInUser, setLoggedInUser] = useState([]);
 
 
   return (
-<BrowserRouter>
-      <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/lobby" element={<Lobby />} />
-          <Route path="/classic" element={<GameClassic />} />
-      </Routes>
-    </BrowserRouter>
+    <AppContext.Provider value={{ loggedInUser, setLoggedInUser }}>
+      <BrowserRouter>  
+        <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/lobby" element={<Lobby />} />
+            <Route path="/classic" element={<GameClassic />} />
+        </Routes>
+      </BrowserRouter>
+    </AppContext.Provider>
   );
 }
 export default App;

@@ -90,49 +90,7 @@ function Register() {
 
     }
 
-    async function handleLoginFormSubmit(event) {
-        event.preventDefault();
-
-        const form = event.target;
-        const username = form.elements.username.value;
-        const password = form.elements.password.value;
-
-        try {
-            // Send initial POST request with only the username
-            const response = await axios.post('http://localhost:6969/auth/ULogin', { username });
-            const { userSalt: salt } = response.data; // Retrieve the salt from the server's response
-
-            // Append the salt to the password and hash it
-            const saltedPassword = password + salt;
-            const hashedPassword = SHA256(saltedPassword).toString();
-
-            // Create an object with the login data
-            const loginData = {
-                username,
-                password: hashedPassword,
-            };
-
-            // Send the second POST request to log in the user
-            const loginResponse = await axios.post('http://localhost:6969/auth/login', loginData)
-
-            console.log('User logged in successfully');
-            // Handle successful login
-            // set is authenticated to true
-            setIsPopupActive(false);
-
-            // setShowWelcome(true);
-            //navigate to lobby
-            navigate("/lobby");
-
-
-        } catch (error) {
-            console.error('Error logging user', error);
-            // Handle error during login
-        }
-
-        // Reset the form
-        form.reset();
-    }
+    
 
 
     return (
@@ -144,40 +102,6 @@ function Register() {
             </div>
 
             <main className={`wrapper ${isWrapperActive ? 'active' : ''} ${isPopupActive ? 'active-popup' : ''}`}>
-                <section className="form-box login">
-                    <h2>Login</h2>
-                    <form onSubmit={handleLoginFormSubmit}>
-                        <div className="input-box">
-                            <span className="icon">
-                                <img className="icon-image" src={person} alt="Person Icon"/>
-                            </span>
-                            <input type="text" id="username" required aria-label="Username" />
-                            <label htmlFor="username">Username</label>
-                        </div>
-
-                        <div className="input-box">
-                            <span className="icon">
-                                <img className="icon-image" src={lock} alt="Lock Icon" />
-                            </span>
-                            <input type="password" id="password" required aria-label="Email" />
-                            <label htmlFor="password">Password</label>
-                        </div>
-
-                        <div className="remember-forgot">
-                            <label><input type="checkbox"/>
-                            Remember me</label>
-                            <a href="#">Forgot Password?</a>
-                        </div>
-                        <button type="submit" className="button">Login</button>
-
-                        <div className="login-register">
-                            <p>Don't have an account? <button className="register-link" onClick={handleRegisterClick}>
-                                Register
-                            </button>
-                            </p>
-                        </div>
-                    </form>
-                </section>
 
 
                 <section className="form-box register">

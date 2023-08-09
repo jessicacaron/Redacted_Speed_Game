@@ -1,13 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import io from 'socket.io-client';
 import './Chat.css';
 import {useLocation} from "react-router-dom";
+import { AppContext } from '../App';
+
 
 const Chat = () => {
     const [messages, setMessages] = useState([]);
     const messagesRef = useRef(null);
     const socketRef = useRef(null);
     const [isUsernameSubmitted, setIsUsernameSubmitted] = useState(false);
+    let { loggedInUser } = useContext(AppContext);
 
     const location =  useLocation();
     const queryParams = new URLSearchParams(location.search);

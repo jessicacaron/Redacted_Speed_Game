@@ -1,11 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import "./Room.css";
+import { AppContext } from '../App';
+
 import io from "socket.io-client";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const COUNTDOWN_DURATION = 5; // in seconds
 
 const Room = () => {
+    let { loggedInUser } = useContext(AppContext);
+
     const [socket, setSocket] = useState(null);
     const [rooms, setRooms] = useState([]);
     const [joinedRoom, setJoinedRoom] = useState(null);
@@ -115,7 +119,7 @@ const Room = () => {
     return (
         <div className="lobby-container">
             <div className="create">
-            <p className="create-username">Your username: {username}</p>
+            <p className="create-username">Your username: {loggedInUser}</p>
             <br></br>
                 <h2>Create a Room</h2>
                 <div className="create-button">
@@ -141,8 +145,8 @@ const Room = () => {
                                 <span>{room.name}</span>
                                 <h5 >Users in this room:</h5>
                                 <ul className="users-list">
-                                    {room.users.map((user) => (
-                                        <li key={user}>{user}</li>
+                                    {room.users.map((loggedInUser) => (
+                                        <li key={loggedInUser}>{loggedInUser}</li>
                                     ))}
                                 </ul>
 
