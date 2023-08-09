@@ -12,10 +12,11 @@ export const AppContext = createContext();
 
 function App() {
   let [loggedInUser, setLoggedInUser] = useState([]);
+  let [gameSelected, setGameSelected ] = useState([]);
 
 
   return (
-    <AppContext.Provider value={{ loggedInUser, setLoggedInUser }}>
+    <AppContext.Provider value={{ loggedInUser, setLoggedInUser, gameSelected, setGameSelected }}>
       <BrowserRouter>  
         <Routes>
             <Route path="/" element={<Login />} />

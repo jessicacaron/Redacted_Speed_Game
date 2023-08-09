@@ -11,7 +11,7 @@ import { AppContext } from '../App'
 function GameClassic() {
   const [connected, setConnected] = useState(false);
   const navigate = useNavigate();
-  let { loggedInUser } = useContext(AppContext);
+  let { loggedInUser, gameSelected } = useContext(AppContext);
   
   const [playerUsername, setPlayerUsername] = useState('');
 
@@ -50,6 +50,8 @@ function GameClassic() {
           <button onClick={handleExitClick}>Exit</button>
           <h5>User:</h5>
           <h2 className='gameboard-username'>{loggedInUser}</h2>
+          <h1>TESTING: {gameSelected}</h1>
+
 
         </div>
       ) : (

@@ -8,7 +8,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 const COUNTDOWN_DURATION = 5; // in seconds
 
 const Room = () => {
-    let { loggedInUser } = useContext(AppContext);
+    let { loggedInUser, setGameSelected, gameSelected } = useContext(AppContext);
+    
 
     const [socket, setSocket] = useState(null);
     const [rooms, setRooms] = useState([]);
@@ -112,6 +113,8 @@ const Room = () => {
       // Emit 'readyUp' event to the backend with the user's username and room name
       socket.emit("readyUp", { username, room: joinedRoom.name });
       console.log("room data being sent from frontend: ", joinedRoom.name);
+      setGameSelected(joinedRoom.name);
+
     }
   };
 
@@ -143,6 +146,7 @@ const Room = () => {
 
                                 <span>{room.name}</span>
                                 <h5 >Users in this room:</h5>
+                                <h1>TESTING: {gameSelected}</h1>
                                 <ul className="users-list">
                                     {room.users.map((user) => (
                                         <li key={user}>{user}</li>
