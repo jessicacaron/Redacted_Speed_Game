@@ -3,8 +3,10 @@ import person from '../icons/person.svg';
 import mail from '../icons/mail.svg';
 import axios from 'axios';
 import { SHA256 } from 'crypto-js';
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from '../App'
+
 
 
 
@@ -16,6 +18,7 @@ function Register() {
 
     //popup login
     const [isPopupActive, setIsPopupActive] = useState(true);
+    let { loggedInUser, setLoggedInUser } = useContext(AppContext);
 
     //wrapper
     const [isWrapperActive, setIsWrapperActive] = useState(true);
@@ -71,6 +74,7 @@ function Register() {
                 salt,
             };
             //setPlayer(registrationData.username);
+            setLoggedInUser("" + username);
 
 
             // Send the second POST request to register the user
