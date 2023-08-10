@@ -12,6 +12,7 @@ function GameClassic() {
   const [connected, setConnected] = useState(false);
   const navigate = useNavigate();
   let { loggedInUser, gameSelected } = useContext(AppContext);
+  const [tempCard, setTempCard] = useState([])
   
   const [playerUsername, setPlayerUsername] = useState('');
 
@@ -23,21 +24,40 @@ function GameClassic() {
     socket.on('connect', () => {
       console.log('Connected to the server');
       setConnected(true);
+      socket.emit('send-room-number', gameSelected)
+      console.log(`gameSelected ${gameSelected}`)
+      
+      socket.on('recieve-card-data', (cardData) => {
+        setTempCard(cardData);
+        console.log("whhhooooooooooo")
+        console.log(cardData)
+        console.log(tempCard)
+        console.log(cardData.shuffledDeck)
+        
+        console.log(cardData.shuffledDeck[0])
+        console.log(cardData.shuffledDeck[0].rank)
+      })
+
     });
+    
+
+
 
     socket.on('playerJoined', (username) => {
         setPlayerUsername(username);
         console.log(`User ${username} is connected to the GameClassic`);
+        
       });
 
     // Clean up the socket connection on component unmount
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [io.socket, gameSelected]);
 
   const handleExitClick = () => {
-    navigate(`/lobby?username=${playerUsername}`);
+    
+    navigate(`/lobby?username=${loggedInUser}`);
   };
 
   return (
@@ -51,6 +71,7 @@ function GameClassic() {
           <h5>User:</h5>
           <h2 className='gameboard-username'>{loggedInUser}</h2>
           <h1>TESTING: {gameSelected}</h1>
+          {/* <h3>cards: {JSON.stringify(tempCard)}</h3> */}
 
 
         </div>
@@ -60,7 +81,7 @@ function GameClassic() {
           <h1>Connecting...</h1>
         </div>
       )}
-      <div>{ClassicGameBoard()}</div>
+      <div>{ClassicGameBoard(tempCard)}</div>
     </main>
   );
 }
