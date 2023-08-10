@@ -5,7 +5,7 @@ const io = require('socket.io')(6969);
 
 io.on('connection', (socket) => {
     console.log('A user connected');
-
+    console.log('classic speed game has started being created');
     // Initialize hands for player1 and player2
     const player1Hand = [];
     const player2Hand = [];

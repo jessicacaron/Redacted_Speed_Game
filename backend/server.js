@@ -9,6 +9,9 @@ const jwt = require("jsonwebtoken");
 const secretKey = "secret"; // Replace with your own secret key
 const { v4: uuidv4 } = require('uuid');
 const { log } = require("console");
+//const {Deck, shuffleDeck} = require("./deck.js")
+let deck = require('./deck.js')
+//import Deck from './deck.js'
 
 const PORT = 6969;
 const app = express();
@@ -116,7 +119,11 @@ io.on("connection", (socket) => {
       type: roomType,
       users: [username],
       usersReady: [],
+      shuffledDeck: deck
+      
     };
+    console.log('this is the deck that shuffled')
+    console.log(newRoom.shuffledDeck)
     rooms.push(newRoom);
 
     // Join user that created room
@@ -140,6 +147,24 @@ io.on("connection", (socket) => {
     io.emit('waitingRooms', rooms.filter((room) => room.users.length > 0));
   });
 
+
+  socket.on('send-room-number', ({gameSelected}) => {
+    const targetRoom = [rooms.find((room) => room.shuffledDeck)];
+    console.log('purple dinosaurs')
+    console.log(targetRoom)
+    console.log(rooms.find((room) => room.shuffledDeck))
+    console.log(rooms[0])
+    //console.log(targetRoom)
+    //console.log(rooms.find(gameSelected))
+    console.log(rooms.shuffledDeck);
+    if (rooms.find((room) => room.name)) {
+      socket.emit('recieve-card-data', rooms.find((room) => room.shuffledDeck))
+      console.log('pink dinosaurs')
+    }
+    
+    
+    //io.sockets.in(gameSelected).emit(roomId.shuffledDeck)
+  });
 
   // JOINING ROOMS
   socket.on('joinRoom', ({ username, roomId }) => {
