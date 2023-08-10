@@ -37,7 +37,8 @@ function GameClassic() {
   }, []);
 
   const handleExitClick = () => {
-    navigate(`/lobby?username=${playerUsername}`);
+    
+    navigate(`/lobby?username=${loggedInUser}`);
   };
 
   return (
