@@ -26,3 +26,8 @@ Upon a second player joining a game, both players push a button to signal they a
 ## Time to complete:
 
  6 Weeks
+
+## Challenges:
+For this project, we incorporated user authentication including input validation.  We wanted to make sure password information stayed private and wasn't sent through the browser as raw data.  Including a salt and hashing with sha-256 helped us accomplish this.  
+      
+Another challenge with this project was multi-user chat interface.  We used sockets to send and receive data between all users.  Sockets were used to transfer game data to users as well.
