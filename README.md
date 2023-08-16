@@ -1,5 +1,5 @@
 ﻿# Speed Game
-![connect4](https://github.com/jessicacaron/Redacted_Speed_Game/assets/77312057/8a877851-e001-4a5d-bea8-160eaf05565e)
+<img width="1570" alt="Screenshot 2023-08-15 at 9 55 46 PM" src="https://github.com/jessicacaron/Redacted_Speed_Game/assets/77312057/ccf90e12-0884-43ca-a705-5ea37d46483e">
 
 ## Project Overview
 
