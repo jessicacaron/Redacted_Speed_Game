@@ -1,4 +1,5 @@
 ﻿# Speed Game
+![connect4](https://github.com/jessicacaron/Redacted_Speed_Game/assets/77312057/8a877851-e001-4a5d-bea8-160eaf05565e)
 
 ## Project Overview
 
