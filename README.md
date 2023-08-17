@@ -32,3 +32,10 @@ Upon a second player joining a game, both players push a button to signal they a
 For this project, we incorporated user authentication including input validation.  We wanted to make sure password information stayed private and wasn't sent through the browser as raw data.  Including a salt and hashing with sha-256 helped us accomplish this.  
       
 Another challenge with this project was multi-user chat interface.  We used sockets to send and receive data between all users.  Sockets were used to transfer game data to users as well.
+
+## Personal Contribution:
+For this assignment, I helped by implementing the following functionality-
+- All React Routing and Component creation
+- User Authentication and modifications to include global username storage using react hooks. Set up form validation and managed the database storage for all users.
+- Styling for all components/pages. Using CSS and images provided to me, created a theme/style for the login page, registration page, the lobby, and the game screens. Laid out room creation, adding buttons for joining rooms and exiting.
+- Set up the global storage to send all user and game state data to connected users.
