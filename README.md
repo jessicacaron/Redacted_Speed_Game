@@ -1,5 +1,6 @@
 ﻿# Speed Game
-<img width="1570" alt="Screenshot 2023-08-15 at 9 55 46 PM" src="https://github.com/jessicacaron/Redacted_Speed_Game/assets/77312057/ccf90e12-0884-43ca-a705-5ea37d46483e">
+![SpeedGameDemo](https://github.com/jessicacaron/Redacted_Speed_Game/assets/77312057/3b300ede-aed7-4e75-a852-936615ae405f)
+
 
 ## Project Overview
 
